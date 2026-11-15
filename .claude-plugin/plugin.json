@@ -1,0 +1,19 @@
+{
+  "name": "smbact",
+  "displayName": "SMBAct",
+  "version": "1.0.0",
+  "description": "Find, arrange, place and move application windows across displays and macOS desktops with SMBAct, through its MCP server or smbact-cli, and diagnose the setup.",
+  "author": {
+    "name": "SMBlob"
+  },
+  "homepage": "https://smblob.com/products/smbact/",
+  "license": "MIT",
+  "keywords": [
+    "window-manager",
+    "windows",
+    "layout",
+    "macos",
+    "spaces",
+    "mcp"
+  ]
+}

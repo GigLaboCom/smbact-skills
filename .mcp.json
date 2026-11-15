@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "smbact": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/smbact-cli",
+      "args": ["mcp", "serve", "--quiet"]
+    }
+  }
+}
