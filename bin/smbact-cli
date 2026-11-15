@@ -1,0 +1,27 @@
+#!/bin/sh
+# Runs the smbact-cli of the installed SMBAct. Order: $SMBACT_CLI, the app bundle in /Applications or
+# ~/Applications (macOS), Spotlight by bundle id (both variants), then another smbact-cli on PATH (Linux, Windows
+# Git Bash). Apps kept in a *.noindex folder are invisible to Spotlight: set SMBACT_CLI for them.
+set -eu
+self_dir=$(cd "$(dirname "$0")" && pwd)
+run() { exec "$@"; }
+if [ -n "${SMBACT_CLI:-}" ]; then
+  [ -x "$SMBACT_CLI" ] && run "$SMBACT_CLI" "$@"
+  echo "smbact-cli: SMBACT_CLI=$SMBACT_CLI is not executable" >&2; exit 127
+fi
+for app in /Applications/SMBAct.app "$HOME/Applications/SMBAct.app"; do
+  [ -x "$app/Contents/Resources/bin/smbact-cli" ] && run "$app/Contents/Resources/bin/smbact-cli" "$@"
+done
+if command -v mdfind >/dev/null 2>&1; then
+  for id in com.smblob.SMBAct com.denisesakov.smbact; do
+    app=$(mdfind "kMDItemCFBundleIdentifier == '$id'" 2>/dev/null | head -n 1)
+    [ -n "$app" ] && [ -x "$app/Contents/Resources/bin/smbact-cli" ] && run "$app/Contents/Resources/bin/smbact-cli" "$@"
+  done
+fi
+IFS=:
+for dir in $PATH; do
+  [ "$dir" = "$self_dir" ] && continue
+  [ -x "$dir/smbact-cli" ] && run "$dir/smbact-cli" "$@"
+done
+echo "smbact-cli: not found. Install SMBAct, or set SMBACT_CLI to the full path of smbact-cli" >&2
+exit 127

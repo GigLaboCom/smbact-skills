@@ -1,0 +1,22 @@
+{
+  "name": "smbact",
+  "owner": {
+    "name": "SMBlob"
+  },
+  "description": "Agent skills for SMBAct, the window manager.",
+  "plugins": [
+    {
+      "name": "smbact",
+      "source": "./",
+      "description": "Arrange, place and move windows with SMBAct (MCP or smbact-cli): a router skill plus windows, place, layouts, desktops and doctor.",
+      "license": "MIT",
+      "keywords": [
+        "window-manager",
+        "windows",
+        "layout",
+        "mcp"
+      ],
+      "homepage": "https://smblob.com/products/smbact/"
+    }
+  ]
+}
