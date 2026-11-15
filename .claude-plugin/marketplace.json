@@ -3,20 +3,26 @@
   "owner": {
     "name": "SMBlob"
   },
-  "description": "Agent skills for SMBAct, the window manager.",
+  "description": "SMBAct agent skills: window management for AI agents on macOS, Windows and Linux.",
   "plugins": [
     {
       "name": "smbact",
       "source": "./",
-      "description": "Arrange, place and move windows with SMBAct (MCP or smbact-cli): a router skill plus windows, place, layouts, desktops and doctor.",
+      "description": "Let the agent find, focus, tile, move and resize windows with SMBAct (MCP or smbact-cli): a router skill plus windows, place, layouts, desktops and doctor. macOS, Windows, Linux incl. Wayland.",
       "license": "MIT",
       "keywords": [
         "window-manager",
+        "window-management",
+        "mcp",
+        "layouts",
+        "multi-monitor",
+        "macos",
         "windows",
-        "layout",
-        "mcp"
+        "linux",
+        "wayland"
       ],
-      "homepage": "https://smblob.com/products/smbact/"
+      "homepage": "https://smblob.com/products/smbact/",
+      "repository": "https://github.com/GigLaboCom/smbact-skills"
     }
   ]
 }
