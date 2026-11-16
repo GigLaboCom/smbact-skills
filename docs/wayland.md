@@ -50,31 +50,36 @@ mcp() {
     -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$1\",\"arguments\":$2}}"
 }
 
-mcp list_windows '{"fields":["id","app","title","frame"]}'
+mcp list_windows '{}'
 mcp window_action '{"window_id":"<id from list_windows>","action":"left-half"}'
 mcp place_windows '{"placements":[{"app":"Firefox","frame":"0,0,60%,100%"},{"bundle_id":"kitty","frame":"60%,0,40%,100%"}]}'
 # on Linux, bundle_id matches the window class (WM_CLASS / app id) that list_windows reports as "class"
 ```
+
+`place_windows`, `set_window_frame`, `get_capabilities` and `list_windows`' `fields` / `class` filters come with the
+next SMBAct release. SMBAct 2.0.0 (build 518) has `list_windows` (`app`, `title`), `list_displays`, `window_action`,
+`focus_window`, `minimize_all` and `close_window`: use the named actions (`left-half`, `first-third`, …) there.
 
 A rough map for `wmctrl` / `xdotool` users:
 
 | X11 habit | SMBAct tool |
 |---|---|
 | `wmctrl -l` | `list_windows` |
-| `wmctrl -r <win> -e 0,x,y,w,h`, `xdotool windowmove` / `windowsize` | `set_window_frame`, or `place_windows` with `"area": "screen"` |
+| `wmctrl -r <win> -e 0,x,y,w,h`, `xdotool windowmove` / `windowsize` | `set_window_frame`, or `place_windows` with `"area": "screen"` (next release) |
 | `wmctrl -a <win>`, `xdotool windowactivate` | `focus_window` |
 | `wmctrl -r <win> -b add,maximized_vert,maximized_horz` | `window_action` `maximize` |
-| a tiling script with `xrandr` math | `place_windows` with `%`, fractions, `grid` + `cell`, `gap`, `display` |
+| a tiling script with `xrandr` math | `place_windows` with `%`, fractions, `grid` + `cell`, `gap`, `display` (next release); on 2.0.0 the named actions |
 
 Arguments of every tool: [`skills/smbact/references/tools.md`](../skills/smbact/references/tools.md).
 
 ## What to expect
 
-- **Coordinates** on GNOME and KDE Wayland are logical pixels, top-left origin. `get_capabilities` says which units the
-  session uses.
-- **Results are read back:** `place_windows` reports a row per window (`exact`, `adjusted` with reasons, `failed`),
+- **Coordinates** on GNOME and KDE Wayland are logical pixels, top-left origin. `get_capabilities` (next release) says
+  which units the session uses.
+- **Results are read back:** `place_windows` (next release) reports a row per window (`exact`, `adjusted` with reasons, `failed`),
   because a compositor may refuse a size (minimum sizes, size increments).
-- **Desktops:** moving windows between workspaces is macOS-only for now (`list_desktops`, `move_window_to_desktop`).
+- **Desktops:** moving windows between workspaces is macOS-only (`list_desktops`, `move_window_to_desktop`, next
+  release).
 - **License:** tool calls need SMBAct's 14-day trial or a license (one-time, from €14.99, 3 devices in any mix of
-  Linux, macOS and Windows). `get_capabilities` and `get_version` work without one.
+  Linux, macOS and Windows). `get_capabilities` and `get_version` (next release) work without one.
 - **Not supported:** other Wayland compositors (Sway, Hyprland, …). On those SMBAct manages XWayland windows only.

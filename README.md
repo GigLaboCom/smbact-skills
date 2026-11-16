@@ -14,7 +14,7 @@
   <img alt="macOS" src="https://img.shields.io/badge/macOS-supported-black">
   <img alt="Windows" src="https://img.shields.io/badge/Windows-supported-blue">
   <img alt="Linux" src="https://img.shields.io/badge/Linux-X11%20%C2%B7%20GNOME%20%26%20KDE%20Wayland-orange">
-  <img alt="MCP" src="https://img.shields.io/badge/MCP-14%20tools-8a2be2">
+  <img alt="MCP" src="https://img.shields.io/badge/MCP-6%20tools%20in%202.0.0%20%C2%B7%2014%20next-8a2be2">
   <img alt="Agent Skills" src="https://img.shields.io/badge/Agent%20Skills-6-2ea44f">
   <img alt="License" src="https://img.shields.io/badge/skills-MIT-lightgrey">
 </p>
@@ -36,6 +36,12 @@ Copilot and Gemini CLI can all load them.
 
 You need [SMBAct](https://smblob.com/products/smbact/download/) installed and running (14-day trial, then a paid
 license; see [Pricing](#pricing-and-license)).
+
+> **Which SMBAct version.** The public SMBAct 2.0.0 (build 518) has 6 MCP tools: list windows and displays, named
+> actions (halves, thirds, maximize, next display…), focus, minimize all, close. Exact placement (`place_windows`,
+> `set_window_frame`), saved layouts, macOS desktops and `get_capabilities` come with the next SMBAct release
+> (these skills were built against build 709). The skills detect what your SMBAct has and use only that, so
+> `smbact-place`, `smbact-layouts` and `smbact-desktops` tell you they need the update instead of failing.
 
 **Claude Code plugin** (the skills plus the MCP server over stdio, no token):
 
@@ -73,14 +79,16 @@ it moves several at once.
 | You say | What happens |
 |---|---|
 | "Put Chrome on the left half and Slack on the right" | two named layout actions (`smbact-windows`) |
-| "Send the terminal to the other monitor" | `move_window_to_display` |
-| "Make Safari 60 % wide on the left and Terminal the rest" | one exact placement for two windows (`smbact-place`) |
-| "A 3×2 grid of my editor windows with 10 px gaps" | grid placement, dry run first |
-| "1200×800 in the top right corner of the LG display" | exact frame on a named display |
-| "Set up my coding layout" / "Save this arrangement as coding" / "Bring back my morning layout" | saved layouts (`smbact-layouts`) |
-| "Send this window to Desktop 2 and go with it" | macOS Spaces (`smbact-desktops`) |
+| "Send the terminal to the other monitor" | `window_action` `next-display` (2.0.0), `move_window_to_display` (next release) |
+| "Make Safari 60 % wide on the left and Terminal the rest" | one exact placement for two windows (`smbact-place`)¹ |
+| "A 3×2 grid of my editor windows with 10 px gaps" | grid placement, dry run first¹ |
+| "1200×800 in the top right corner of the LG display" | exact frame on a named display¹ |
+| "Set up my coding layout" / "Save this arrangement as coding" / "Bring back my morning layout" | saved layouts (`smbact-layouts`)¹ |
+| "Send this window to Desktop 2 and go with it" | macOS Spaces (`smbact-desktops`)¹ |
 | "Minimize everything" | `minimize_all`, only when asked in so many words |
 | "My client does not see SMBAct" / "How do I connect SMBAct to Cursor?" | read-only diagnosis (`smbact-doctor`) |
+
+¹ Needs the next SMBAct release (see [Which SMBAct version](#install)); on 2.0.0 build 518 the agent says so.
 
 More prompts, including the ones that must *not* trigger a skill and the safety cases: [`evals/prompts.md`](evals/prompts.md).
 
@@ -137,17 +145,19 @@ The server binds 127.0.0.1 only, checks `Host` and `Origin`, and asks for the to
 
 ## The 14 MCP tools
 
-| Tool | Does |
-|---|---|
-| `list_windows`, `get_window` | Open windows: id, app, title, frame, display, state; filters by app, title, class, display |
-| `list_displays` | Displays with their frame and work area |
-| `window_action` | One of 46 named actions: halves, thirds, fourths, quarters, sixths, eighths, center, move to an edge, maximize, fullscreen, minimize, restore, next / previous display |
-| `place_windows` | One to 32 windows at any geometry in one request: px, dip, %, fractions, anchors, grids, gaps, margins, dry run, a result per window |
-| `set_window_frame` | One window at an exact frame |
-| `move_window_to_display` | To another monitor, keeping its place and size relative to the work area |
-| `focus_window`, `minimize_all`, `close_window` | Focus; minimize all; close (off by default, with a confirmation dialog) |
-| `list_desktops`, `move_window_to_desktop` | macOS Spaces |
-| `get_capabilities`, `get_version` | What this install supports; work without a license |
+SMBAct 2.0.0 (build 518) has the six marked ✓; the rest come with the next release.
+
+| Tool | Does | 2.0.0 |
+|---|---|---|
+| `list_windows`, `get_window` | Open windows: id, app, title, frame, display, state; filters by app, title, class, display | `list_windows` ✓ (filters: app, title) |
+| `list_displays` | Displays with their frame and work area | ✓ |
+| `window_action` | One of 46 named actions: halves, thirds, fourths, quarters, sixths, eighths, center, move to an edge, maximize, fullscreen, minimize, restore, next / previous display | ✓ |
+| `place_windows` | One to 32 windows at any geometry in one request: px, dip, %, fractions, anchors, grids, gaps, margins, dry run, a result per window | — |
+| `set_window_frame` | One window at an exact frame | — |
+| `move_window_to_display` | To another monitor, keeping its place and size relative to the work area | — (use `next-display`) |
+| `focus_window`, `minimize_all`, `close_window` | Focus; minimize all; close (off by default, with a confirmation dialog) | ✓ |
+| `list_desktops`, `move_window_to_desktop` | macOS Spaces | — |
+| `get_capabilities`, `get_version` | What this install supports; work without a license | — |
 
 Every argument, generated from SMBAct's source: [`skills/smbact/references/tools.md`](skills/smbact/references/tools.md).
 The 46 actions: [`skills/smbact-windows/references/actions.md`](skills/smbact-windows/references/actions.md). The
@@ -179,8 +189,8 @@ Yes, with SMBAct running and this plugin installed (or SMBAct's MCP server added
 windows, then places them with named actions or exact frames.
 
 **Is there a window manager MCP server for macOS?**
-SMBAct has one built in: 14 tools for listing, focusing, tiling, placing and moving windows, plus macOS Spaces. It
-runs on 127.0.0.1 and needs no cloud service.
+SMBAct has one built in: in 2.0.0, 6 tools for listing, focusing, tiling and closing windows; the next release adds
+exact placement and macOS Spaces (14 tools). It runs on 127.0.0.1 and needs no cloud service.
 
 **Does it work on Windows and Linux?**
 Yes. On Windows and Linux the agent connects over HTTP with a token. On Linux it works on X11 and on GNOME and KDE
@@ -199,8 +209,8 @@ No. SMBAct arranges windows; it does not launch apps, type, or read window conte
 server next to it.
 
 **Can it save and restore window layouts?**
-Yes: "save this as coding", "bring back coding". The `smbact-layouts` skill stores each layout as a `place_windows`
-request and replays it.
+With the next SMBAct release: "save this as coding", "bring back coding". The `smbact-layouts` skill stores each
+layout as a `place_windows` request and replays it, and `place_windows` is not in 2.0.0 (build 518).
 
 **Is it safe to give an agent control of my windows?**
 The rules are in [Safety](#safety). SMBAct adds its own: per-tool switches on its MCP page, `close_window` off by
@@ -222,7 +232,8 @@ default, a confirmation dialog for closing, and a black list of apps it never to
 - **Detect, don't assume.** Every build reports version `2.0.0`; the skills read `tools/list` and
   `get_capabilities` and degrade on older builds.
 
-Built for SMBAct 2.0.0 from smbact-app master `93372cf` (see `VERIFIED.json`); the matching release build is 709.
+Built against smbact-app master `93372cf` (see `VERIFIED.json`): build 709, which reports version 2.0.0 but is not
+the public 2.0.0 (that is build 518, `d3c7f89`). On build 518 the skills fall back to its six tools.
 Regenerate after SMBAct changes:
 
 ```bash
