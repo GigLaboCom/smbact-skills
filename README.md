@@ -120,8 +120,8 @@ agent ──▶ smbact (router) ──▶ smbact-windows | -place | -layouts | -
 | OS | What the agent talks to | Notes |
 |---|---|---|
 | **macOS** (Apple Silicon, Intel) | `smbact-cli mcp serve` (stdio), shipped inside `SMBAct.app` | The plugin finds it in `/Applications`, `~/Applications` or through Spotlight. Elsewhere (e.g. a `*.noindex` folder): `export SMBACT_CLI=/path/to/SMBAct.app/Contents/Resources/bin/smbact-cli`. SMBAct needs Accessibility; Screen Recording for titles of other desktops. |
-| **Windows** (x64) | HTTP, `http://127.0.0.1:5057/mcp` with a bearer token | No CLI hand-over on Windows. Turn on the server on SMBAct's MCP page and copy the token from there. |
-| **Linux** (x64; X11, GNOME 46–51 and KDE Plasma 6 on Wayland) | HTTP, as on Windows | On Wayland SMBAct sees every window through its [GNOME Shell extension or KWin script](https://github.com/GigLaboCom/smbact-shell): [GNOME](https://smblob.com/products/smbact/documentation/gnome-wayland/), [KDE Plasma](https://smblob.com/products/smbact/documentation/kde-plasma-wayland/). Details: [docs/wayland.md](docs/wayland.md). |
+| **Windows** (x64) | HTTP, `http://127.0.0.1:5057/mcp` with a bearer token | `smbact-cli` is not shipped for Windows yet ([on the roadmap](https://smblob.com/products/smbact/roadmap/)). Turn on the server on SMBAct's MCP page and copy the token from there. |
+| **Linux** (x64; X11, GNOME 46–51 and KDE Plasma 6 on Wayland) | HTTP, as on Windows | `smbact-cli` for Linux is on the [roadmap](https://smblob.com/products/smbact/roadmap/). On Wayland SMBAct sees every window through its [GNOME Shell extension or KWin script](https://github.com/GigLaboCom/smbact-shell): [GNOME](https://smblob.com/products/smbact/documentation/gnome-wayland/), [KDE Plasma](https://smblob.com/products/smbact/documentation/kde-plasma-wayland/). Details: [docs/wayland.md](docs/wayland.md). |
 
 Install guides: [macOS](https://smblob.com/products/smbact/documentation/install-macos/),
 [Windows](https://smblob.com/products/smbact/documentation/install-windows/), all downloads on the
@@ -257,6 +257,9 @@ Status: **v1 draft, not yet run by an agent against a live SMBAct.**
 
 ## Links
 
+- For people, not agents: [SMBAct for AI agents](https://smblob.com/products/smbact/ai-agents/) ·
+  [the MCP server](https://smblob.com/products/smbact/ai-agents/mcp-server/) (setup, tools, videos on macOS, Windows and KDE) ·
+  [the agent skills](https://smblob.com/products/smbact/ai-agents/agent-skills/)
 - SMBAct: [product page](https://smblob.com/products/smbact/) · [download](https://smblob.com/products/smbact/download/) ·
   [documentation](https://smblob.com/products/smbact/documentation/) · [roadmap](https://smblob.com/products/smbact/roadmap/)
 - Comparisons: [SMBAct vs Rectangle](https://smblob.com/products/smbact/compare/smbact-vs-rectangle/) ·
